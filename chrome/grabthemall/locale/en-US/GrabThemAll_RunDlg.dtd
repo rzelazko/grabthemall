@@ -1,0 +1,6 @@
+<!ENTITY rundlg.title "Grab Them All - Job in progress">
+<!ENTITY rundlg.cancel "Cancel">
+<!ENTITY rundlg.dialog.title "Grab Them All">
+<!ENTITY rundlg.dialog.description "Please wait... Job in progress">
+<!ENTITY rundlg.groupbox.progress "Processing...">
+<!ENTITY rundlg.groupbox.browser "Currently processed page">

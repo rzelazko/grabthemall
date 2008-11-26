@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE prefwindow SYSTEM "chrome://grabthemall/locale/GrabThemAll_Options.dtd">
+<prefwindow id="grabthemallPreferences" 
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+	title="&prefwindow.title;">	
+	
+	<prefpane id="toppane" label="&dialogheader.title;">
+    
+		<preferences>
+			<preference id="filetypepref" name="extensions.grabthemall.filetype" type="int"/>
+			<preference id="capture-width" name="extensions.grabthemall.capture.width" type="int"/>
+			<preference id="capture-height" name="extensions.grabthemall.capture.height" type="int"/>
+			<preference id="completepagepref" name="extensions.grabthemall.completepage" type="int"/>
+			<preference id="timeoutpref" name="extensions.grabthemall.timeout" type="int"/>
+		</preferences>
+	
+		<dialogheader title="&dialogheader.title;" description="&dialogheader.descr;"/>
+	
+		<groupbox>
+			<caption label="&filetypepref.label;"/>
+			<radiogroup preference="filetypepref">
+				<radio id="filetypepref-png" value="0" label="&filetypepref.label.jpg;"/>
+				<radio id="filetypepref-jpg" value="1" label="&filetypepref.label.png;"/>
+			</radiogroup>
+		</groupbox>		
+	
+		<groupbox>
+			<caption label="&completepagepref.label;"/>
+			<radiogroup preference="completepagepref">
+				<radio id="completepagepref-yes" value="1" label="&completepagepref.label.yes;"/>
+				<radio id="completepagepref-no" value="0" label="&completepagepref.label.no;"/>
+			</radiogroup>
+		</groupbox>		
+		
+		<groupbox>
+			<caption label="&windowsize.label;"/>
+			<grid flex="1">
+				<columns>
+					<column/>
+					<column flex="1"/>
+				</columns>
+				<rows>
+					<row>
+						<label control="windowsize-width" value="&windowsize.width;"/>
+						<textbox id="windowsize-width" preference="capture-width" type="number" min="640" size="4" />
+					</row>
+					<row>
+						<label control="windowsize-height" value="&windowsize.height;"/>
+						<textbox id="windowsize-height" preference="capture-height" type="number" min="480" size="4" />
+					</row>
+				</rows>
+			</grid>	
+		</groupbox>
+		
+		<groupbox>
+			<caption label="&timeout.caption;"/>
+				<hbox>
+					<label control="timeout-textbox" value="&timeout.label;"/>
+					<textbox id="timeout-textbox" preference="timeoutpref" type="number" min="0" size="2" />
+				</hbox>	
+		</groupbox>
+
+	</prefpane>
+</prefwindow>

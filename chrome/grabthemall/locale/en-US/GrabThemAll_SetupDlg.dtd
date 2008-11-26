@@ -1,0 +1,12 @@
+<!ENTITY setupwindow.title "Grab Them All - Run!">
+<!ENTITY setupwindow.accept "Let's go!">
+<!ENTITY setupwindow.cancel "Cancel">
+<!ENTITY setupwindow.dialog.title "Grab Them All">
+<!ENTITY setupwindow.dialog.description "Run this stuff">
+<!ENTITY setupwindow.caption.urlsfile "File with URLs">
+<!ENTITY setupwindow.caption.destdir "Destination directory">
+<!ENTITY setupwindow.button.geturl "Load file with URLs to grab">
+<!ENTITY setupwindow.button.destdir "Select destination dir">
+<!ENTITY setupwindow.button.geturl "Select destination dir">
+<!ENTITY setupwindow.button.urlfileinfo "Please choose a file">
+<!ENTITY setupwindow.button.destdirinfo "Please select destination directory">
