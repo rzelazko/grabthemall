@@ -51,5 +51,6 @@ var GrabThemAll_ScreenShot = {
 		var dataUrl = canvas.toDataURL('image/' + format);
 		GrabThemAll_Utils.saveScreenToFile(this.dir, this.fileBaseName,
 				dataUrl, format);
+		
 	}
 }

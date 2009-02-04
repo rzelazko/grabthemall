@@ -66,8 +66,12 @@ var GrabThemAll_RunDlg = {
 	doScreenShot : function(pageWindow, pageDocument) {
 		var currentUrl = pageWindow.location;
 		if (GrabThemAll_Utils.isUrl(currentUrl)) {
-			GrabThemAll_ScreenShot.doSS(pageWindow, this.setupInfo.dir,
-					GrabThemAll_Utils.hash(this.setupInfo.processingUrl));
+			var urlHash = GrabThemAll_Utils.hash(this.setupInfo.processingUrl);
+			GrabThemAll_ScreenShot.doSS(pageWindow, this.setupInfo.dir, urlHash);
+			if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
+				GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, 
+					'_report.csv', '"[ok]";"' + currentUrl + '";"' + urlHash + "\"\n");
+			}
 		}
 		this.nextPage();
 		GrabThemAll_Utils.dump(pageWindow.location + ' [ok]');
@@ -82,6 +86,10 @@ var GrabThemAll_RunDlg = {
 		}
 		errMsg += ']';
 		GrabThemAll_Utils.dump(pageWindow.location + ' ' + errMsg);
+		if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
+			GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, 
+				'_report.csv', '"' + errMsg + '";"' + pageWindow.location + '";"' + "\"\n");
+		}
 	},
 
 	nextPage : function() {

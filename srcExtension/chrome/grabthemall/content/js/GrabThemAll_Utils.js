@@ -2,7 +2,7 @@
  * File based on on Screengrab! extension by Andy Mutton
  */
 
-GrabThemAll_Utils = {
+var GrabThemAll_Utils = {
 	
 	dump : function(message) {
 		if (GrabThemAll_Utils.getPref('debug')) {
@@ -18,6 +18,13 @@ GrabThemAll_Utils = {
 		prefs = prefs.getBranch('extensions.grabthemall.');
 		return prefs.getIntPref(name);
 	},
+	
+	getBoolPref : function(name) {
+		var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+				.getService(Components.interfaces.nsIPrefService);
+		prefs = prefs.getBranch('extensions.grabthemall.');
+		return prefs.getBoolPref(name);
+	},
     
     saveScreenToFile : function(nsIDir, fileBaseName, dataUrl, format) {    	
     	var filePath = nsIDir.path;
@@ -29,7 +36,7 @@ GrabThemAll_Utils = {
 		filePath += fileBaseName + '.' + format;
     	
 		var nsFile = Components.classes["@mozilla.org/file/local;1"]
-				.createInstance(Components.interfaces.nsILocalFile);
+			.createInstance(Components.interfaces.nsILocalFile);
 		nsFile.initWithPath(filePath);
 		if (!nsFile.exists()) {
 			nsFile.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 420);
@@ -81,8 +88,8 @@ GrabThemAll_Utils = {
 		                         .createInstance(Components.interfaces.nsIFileOutputStream);
 		
 			// use 0x02 | 0x10 to open file for appending.
-			foStream.init(nsFile, 0x02 | 0x08 | 0x20, 0666, 0); 
-			// write, create, truncate
+			foStream.init(nsFile, 0x02 | 0x08 | 0x10, 0666, 0); 
+			// write, create, append
 			// In a c file operation, we have no need to set file mode with or operation,
 			// directly using "r" or "w" usually.
 			foStream.write(dataTxt, dataTxt.length);

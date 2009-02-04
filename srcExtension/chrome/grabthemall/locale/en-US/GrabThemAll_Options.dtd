@@ -12,3 +12,5 @@
 <!ENTITY completepagepref.label.no "Grab visible window only">
 <!ENTITY timeout.caption "Site processing timeout">
 <!ENTITY timeout.label "Max processing time [sec]:">
+<!ENTITY reportfile.caption "Report file">
+<!ENTITY reportfile.save "Generate report file">
