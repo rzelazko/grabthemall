@@ -10,6 +10,7 @@
 		<stringbundle id="string-bundle" src="chrome://grabthemall/locale/GrabThemAll_RunDlg.properties"/>
 	</stringbundleset>
 	
+	<script type="application/x-javascript" src="js/GrabThemAll_DateFormat.js" />
 	<script type="application/x-javascript" src="js/GrabThemAll_Utils.js" />
 	<!-- <script type="application/x-javascript" src="js/GrabThemAll_ProgressListener.js" /> -->
 	<script type="application/x-javascript" src="js/GrabThemAll_LoadListener.js" />

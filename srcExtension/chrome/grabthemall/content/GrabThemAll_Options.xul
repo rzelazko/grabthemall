@@ -14,6 +14,7 @@
 			<preference id="completepagepref" name="extensions.grabthemall.completepage" type="int"/>
 			<preference id="timeoutpref" name="extensions.grabthemall.timeout" type="int"/>
 			<preference id="reportfile-save" name="extensions.grabthemall.reportfile.save" type="bool"/>
+			<preference id="capture-fileName" name="extensions.grabthemall.capture.fileName" type="int"/>
 		</preferences>
 	
 		<dialogheader title="&dialogheader.title;" description="&dialogheader.descr;"/>
@@ -31,6 +32,14 @@
 			<radiogroup preference="completepagepref">
 				<radio id="completepagepref-yes" value="1" label="&completepagepref.label.yes;"/>
 				<radio id="completepagepref-no" value="0" label="&completepagepref.label.no;"/>
+			</radiogroup>
+		</groupbox>		
+	
+		<groupbox>
+			<caption label="&capturefile.catpion;"/>
+			<radiogroup preference="capture-fileName">
+				<radio id="capture-fileName-base64" value="1" label="&capturefile.base64;"/>
+				<radio id="capture-fileName-url" value="0" label="&capturefile.url;"/>
 			</radiogroup>
 		</groupbox>		
 	

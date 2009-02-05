@@ -1,3 +1,7 @@
+/**
+ * Currently not used (using GrabThemAll_LoadListener instead)
+ */
+
 var GrabThemAll_ProgressListener = {
 	QueryInterface : function(aIID) {
 		if (aIID.equals(Components.interfaces.nsIWebProgressListener)

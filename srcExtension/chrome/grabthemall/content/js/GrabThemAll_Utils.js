@@ -153,7 +153,13 @@ var GrabThemAll_Utils = {
         return grabCanvas;
     },
     
-	hash : function(string) {		
-		return window.btoa(string);
+	hash : function(string) {
+		if (GrabThemAll_Utils.getPref('capture.fileName') > 0) {
+			return window.btoa(string)
+				.replace('+', '-', 'gi')
+				.replace('/', '_', 'gi')
+				.replace('=', ',', 'gi');
+		}
+		return string.replace(/[^a-zA-Z0-9_\-\.\,]+/mig, '_');	
 	}
 }

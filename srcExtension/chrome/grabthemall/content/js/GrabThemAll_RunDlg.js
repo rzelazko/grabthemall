@@ -6,6 +6,9 @@ var GrabThemAll_RunDlg = {
 			processingUrl : '',
 			totalUrls : 0
 		};
+		this.report = {
+			fileName : ''
+		};
 		if ('arguments' in window && window.arguments.length > 0) {
 			this.setupInfo = window.arguments[0];
 		}
@@ -61,16 +64,28 @@ var GrabThemAll_RunDlg = {
 		}, true);*/
 		
 		this.browser.loadURI(url);
+				
+		var now = new Date();		
+		this.report.fileName = '_report_' + now.format("yyyymmdd_HHMMss") + '.csv';
+		GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, this.report.fileName, 
+			'"oryg url";' +
+			'"browser url";' + 
+			'"file name";' + 
+			'"status"' + "\n");
 	},
 
 	doScreenShot : function(pageWindow, pageDocument) {
 		var currentUrl = pageWindow.location;
+		var orygUrl = this.currentUrl();
 		if (GrabThemAll_Utils.isUrl(currentUrl)) {
 			var urlHash = GrabThemAll_Utils.hash(this.setupInfo.processingUrl);
 			GrabThemAll_ScreenShot.doSS(pageWindow, this.setupInfo.dir, urlHash);
 			if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
-				GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, 
-					'_report.csv', '"[ok]";"' + currentUrl + '";"' + urlHash + "\"\n");
+				GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, this.report.fileName, 
+					'"' + orygUrl + '";' +
+					'"' + currentUrl + '";' +
+					'"' + urlHash + (this.fileType == 0 ? '.jpeg' : '.png') + '";' +
+					'"ok"' + "\n");
 			}
 		}
 		this.nextPage();
@@ -80,15 +95,18 @@ var GrabThemAll_RunDlg = {
 	pageError : function(pageWindow, additInfo) {
 		this.nextPage(pageWindow);
 
-		var errMsg = '[error';
+		var errMsg = 'error';
 		if (additInfo) {
 			errMsg += ': ' + additInfo;
 		}
-		errMsg += ']';
+		errMsg += '';
 		GrabThemAll_Utils.dump(pageWindow.location + ' ' + errMsg);
 		if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
-			GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, 
-				'_report.csv', '"' + errMsg + '";"' + pageWindow.location + '";"' + "\"\n");
+			GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, this.report.fileName, 
+				'"' + this.currentUrl() + '";' +
+				'"' + pageWindow.location + '";' +
+				'"";' +
+				'"' + errMsg + "\"\n");
 		}
 	},
 
@@ -104,13 +122,25 @@ var GrabThemAll_RunDlg = {
 			close();
 		}
 	},
+	
+	currentUrl : function() {
+		return this.setupInfo.processingUrl;
+	},
 
 	getUrl : function() {
 		if (this.timeoutId) {
 			window.clearTimeout(this.timeoutId);
 		}
 		if (this.timeoutTime > 0) {
+			var me = this;
 			this.timeoutId = window.setTimeout(function() {
+				if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
+					GrabThemAll_Utils.saveTxtToFile(me.setupInfo.dir, me.report.fileName, 
+						'"' + me.currentUrl() + '";' +
+						'"' + GrabThemAll_RunDlg.browser.currentURI.spec + '";' +
+						'"";' + 
+						'"timeout"' +"\n");
+				}
 				GrabThemAll_RunDlg.browser.stop();
 			}, this.timeoutTime);
 		}
@@ -130,7 +160,7 @@ var GrabThemAll_RunDlg = {
 		 * FIXME this.dialog.title = this.stringsBundle.getFormattedString(
 		 * 'dialogTitle', [doneUrls, this.setupInfo.totalUrls]);
 		 */
-		var nextUrl = this.setupInfo.urlList.pop();
+		var nextUrl = this.setupInfo.urlList.pop().replace(/^\s+|\s+$/g, '');
 		this.setupInfo.processingUrl = nextUrl;
 		if (nextUrl.search(/^http:\/\/[a-zA-Z0-9\.\-]+$/) != -1) {
 			nextUrl += '/';
@@ -140,6 +170,14 @@ var GrabThemAll_RunDlg = {
 				+ (this.fileType == 0 ? 'jpeg' : 'png');
 
 		if (GrabThemAll_Utils.fileExists(this.setupInfo.dir, fileName)) {
+			if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
+				var errMsg = 'err: file already exists';
+				GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, this.report.fileName, 
+					'"' + this.currentUrl() + '";' +
+					'"' + nextUrl + '";' +
+					'"' + fileName + (this.fileType == 0 ? '.jpeg' : '.png') + '";' +
+					'"' + errMsg + "\"\n");
+			}
 			nextUrl = this.getUrl();
 		}
 

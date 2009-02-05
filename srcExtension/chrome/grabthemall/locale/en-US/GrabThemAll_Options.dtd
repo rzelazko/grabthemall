@@ -14,3 +14,6 @@
 <!ENTITY timeout.label "Max processing time [sec]:">
 <!ENTITY reportfile.caption "Report file">
 <!ENTITY reportfile.save "Generate report file">
+<!ENTITY capturefile.catpion "Screen shot file names">
+<!ENTITY capturefile.base64 "Base64 (with replaced +/= to -_,)">
+<!ENTITY capturefile.url "Safe URL (with replaced not-safe chars to _)">
