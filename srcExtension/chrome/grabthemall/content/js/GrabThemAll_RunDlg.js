@@ -67,11 +67,13 @@ var GrabThemAll_RunDlg = {
 				
 		var now = new Date();		
 		this.report.fileName = '_report_' + now.format("yyyymmdd_HHMMss") + '.csv';
-		GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, this.report.fileName, 
-			'"oryg url";' +
-			'"browser url";' + 
-			'"file name";' + 
-			'"status"' + "\n");
+		if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
+			GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, this.report.fileName, 
+				'"oryg url";' +
+				'"browser url";' + 
+				'"file name";' + 
+				'"status"' + "\n");
+		}
 	},
 
 	doScreenShot : function(pageWindow, pageDocument) {
