@@ -4,7 +4,9 @@ var GrabThemAll_RunDlg = {
 			dir : '',
 			urlList : [],
 			processingUrl : '',
-			totalUrls : 0
+			totalUrls : 0,
+			timeToWait : 0,
+			pageTimeOut : 0
 		};
 		this.report = {
 			fileName : ''
@@ -30,10 +32,23 @@ var GrabThemAll_RunDlg = {
 		this.progressLabel = document.getElementById('rundlg-progress-label');
 		this.browser = document.getElementById('rundlg-browser');
 		this.dialog = document.getElementById('grabThemAll-rundlg');
-		
-		this.timeoutId = null;
-		this.timeoutTime = GrabThemAll_Utils.getPref('timeout') * 1000;
 
+		this.timeoutId = null;
+		this.timeToWait = this.setupInfo.timeToWait * 1000;
+		this.timeoutTime = this.setupInfo.pageTimeOut > 0 ? this.setupInfo.pageTimeOut : GrabThemAll_Utils.getPref('timeout');
+		if((this.timeoutTime * 1000)<this.timeToWait)
+		{
+			this.timeoutTime = this.timeToWait + 2500;	//this was added in so that in the reporting we don't get double posting due to a time out error
+		}
+		else if(this.timeoutTime==0 && this.timeToWait==0)
+		{
+			this.timeToWait = this.setupInfo.timeToWait * 1000 + 1000;	//this was added to fix the issue of nothing being done if both time outs were set to 0
+		}
+		else 
+		{
+			this.timeoutTime = this.timeoutTime * 1000;
+		}
+		
 		var url = this.getUrl();
 		if (!url) {
 			close();

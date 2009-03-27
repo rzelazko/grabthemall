@@ -6,6 +6,8 @@ var GrabThemAll = {
 		var setupInfo = {
 			dir : null,
 			urlList : null,
+			timeToWait : null,
+			pageTimeOut : null,
 			errUrls : null
 		};
 		

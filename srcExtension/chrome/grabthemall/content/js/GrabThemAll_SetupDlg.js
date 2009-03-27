@@ -2,6 +2,8 @@ var GrabThemAll_SetupDlg = {
 	onLoad : function() {
 		this.file = null;
 		this.dir = null;
+		var timeToWait = null;
+		var pageTimeOut = null;
 
 		this.urlArray = [];
 		this.stringsBundle = document.getElementById('string-bundle');
@@ -74,6 +76,11 @@ var GrabThemAll_SetupDlg = {
 				this.urlArray.concat(setupInfo.urlList);
 			}
 			setupInfo.urlList = this.urlArray;
+			var timeToWait = ((document.getElementById('timeToWait').value.length>0) ? document.getElementById('timeToWait').value : GrabThemAll_Utils.getPref('timeToWait'));
+			var pageTimeOut = ((document.getElementById('pageTimeOut').value.length>0) ? document.getElementById('pageTimeOut').value : GrabThemAll_Utils.getPref('timeout'));
+			setupInfo.timeToWait = timeToWait;
+			setupInfo.pageTimeOut = pageTimeOut;
+
 		}
 		else {
 			setupInfo.dir = '';

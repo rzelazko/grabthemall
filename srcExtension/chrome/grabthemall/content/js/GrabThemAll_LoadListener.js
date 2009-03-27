@@ -81,7 +81,7 @@ var GrabThemAll_LoadListener = {
             return;
         }
         GrabThemAll_LoadListener.loadFinished = true;
-        GrabThemAll_LoadListener.captureFinalize();
+        setTimeout("GrabThemAll_LoadListener.captureFinalize();", GrabThemAll_RunDlg.timeToWait);	//this allows any sort of javascript on the page a few extra seconds depending on the amount of time passed to it before the picture is taken
     },
     
     captureFinalize: function(){

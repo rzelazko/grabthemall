@@ -84,16 +84,20 @@ var GrabThemAll_Utils = {
 		}
     	
     	if (nsFile != null) {
-			var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"]
-		                         .createInstance(Components.interfaces.nsIFileOutputStream);
-		
-			// use 0x02 | 0x10 to open file for appending.
-			foStream.init(nsFile, 0x02 | 0x08 | 0x10, 0666, 0); 
-			// write, create, append
-			// In a c file operation, we have no need to set file mode with or operation,
-			// directly using "r" or "w" usually.
-			foStream.write(dataTxt, dataTxt.length);
-			foStream.close();
+    		try	{
+				var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"]
+			                         .createInstance(Components.interfaces.nsIFileOutputStream);
+			
+				// use 0x02 | 0x10 to open file for appending.
+				foStream.init(nsFile, 0x02 | 0x08 | 0x10, 0666, 0); 
+				// write, create, append
+				// In a c file operation, we have no need to set file mode with or operation,
+				// directly using "r" or "w" usually.
+				foStream.write(dataTxt, dataTxt.length);
+				foStream.close();
+    		} catch (e) {
+    			// alert('I can\'t write to file: ' + filePath);
+    		}
     	}
     },
 

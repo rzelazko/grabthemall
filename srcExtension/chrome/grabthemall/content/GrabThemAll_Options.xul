@@ -13,6 +13,7 @@
 			<preference id="capture-height" name="extensions.grabthemall.capture.height" type="int"/>
 			<preference id="completepagepref" name="extensions.grabthemall.completepage" type="int"/>
 			<preference id="timeoutpref" name="extensions.grabthemall.timeout" type="int"/>
+			<preference id="timeToWait" name="extensions.grabthemall.timeToWait" type="int"/>
 			<preference id="reportfile-save" name="extensions.grabthemall.reportfile.save" type="bool"/>
 			<preference id="capture-fileName" name="extensions.grabthemall.capture.fileName" type="int"/>
 		</preferences>
@@ -70,10 +71,22 @@
 		
 		<groupbox>
 			<caption label="&timeout.caption;"/>
-				<hbox>
-					<label control="timeout-textbox" value="&timeout.label;"/>
-					<textbox id="timeout-textbox" preference="timeoutpref" type="number" min="0" size="2" />
-				</hbox>	
+			<grid flex="1">
+				<columns>
+					<column/>
+					<column flex="1"/>
+				</columns>
+				<rows>
+					<row>
+						<label control="timeout-textbox" value="&timeout.label;"/>
+						<textbox id="timeout-textbox" preference="timeoutpref" type="number" min="1" size="2" />
+					</row>
+					<row>
+						<label control="timeToWait-textbox" value="&timeToWait.label;"/>
+						<textbox id="timeToWait-textbox" preference="timeToWait" type="number" min="1" size="2" />
+					</row>
+				</rows>
+			</grid>	
 		</groupbox>
 
 	</prefpane>

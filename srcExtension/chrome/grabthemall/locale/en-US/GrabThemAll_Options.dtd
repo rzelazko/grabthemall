@@ -11,7 +11,8 @@
 <!ENTITY completepagepref.label.yes "Grab complete page">
 <!ENTITY completepagepref.label.no "Grab visible window only">
 <!ENTITY timeout.caption "Site processing timeout">
-<!ENTITY timeout.label "Max processing time [sec]:">
+<!ENTITY timeout.label "Max page processing time [sec]:">
+<!ENTITY timeToWait.label "Javascript time to wait [sec]:">
 <!ENTITY reportfile.caption "Report file">
 <!ENTITY reportfile.save "Generate report file">
 <!ENTITY capturefile.catpion "Screen shot file names">

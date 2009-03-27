@@ -5,6 +5,9 @@
 <!ENTITY setupwindow.dialog.description "Run this stuff">
 <!ENTITY setupwindow.caption.urlsfile "File with URLs">
 <!ENTITY setupwindow.caption.destdir "Destination directory">
+<!ENTITY setupwindow.caption.wait "Time limits (seconds)">
+<!ENTITY pageTimeOut.label "Max page processing time:">
+<!ENTITY timeToWait.label "Javascript time to wait:">
 <!ENTITY setupwindow.button.geturl "Load file with URLs to grab">
 <!ENTITY setupwindow.button.destdir "Select destination dir">
 <!ENTITY setupwindow.button.geturl "Select destination dir">

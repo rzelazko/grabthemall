@@ -12,6 +12,12 @@
 	<script type="application/x-javascript" src="js/GrabThemAll_Utils.js" />
 	<script type="application/x-javascript" src="js/GrabThemAll_SetupDlg.js"/>
 	
+	<preferences>
+		<preference id="timeToWaitPref" name="extensions.grabthemall.timeToWait" type="int"/>
+		<preference id="pageTimeOutPref" name="extensions.grabthemall.timeout" type="int"/>
+	</preferences>
+
+	
 	<stringbundleset id="stringbundleset">
 		<stringbundle id="string-bundle" src="chrome://grabthemall/locale/GrabThemAll_SetupDlg.properties"/>
 	</stringbundleset>
@@ -30,5 +36,24 @@
 			<button label="&setupwindow.button.destdir;" oncommand="GrabThemAll_SetupDlg.selectDir();"/>
 			<textbox id="destDirInfo" value="&setupwindow.button.destdirinfo;" readonly="true"/>
 		</vbox>	  
+	</groupbox>
+	<groupbox>
+		<caption label="&setupwindow.caption.wait;"/>
+		<grid flex="1">
+			<columns>
+				<column/>
+				<column flex="1"/>
+			</columns>
+			<rows>
+				<row>
+					<label control="pageTimeOut" value="&pageTimeOut.label;"/>
+					<textbox id="pageTimeOut" preference="pageTimeOutPref" type="number" min="1" size="2" />
+				</row>
+				<row>
+					<label control="timeToWait" value="&timeToWait.label;"/>
+					<textbox id="timeToWait" preference="timeToWaitPref" type="number" min="1" size="2" />
+				</row>
+			</rows>
+		</grid>			 
 	</groupbox>
 </dialog>
