@@ -1,0 +1,5 @@
+content grabthemall chrome/grabthemall/content/
+skin grabthemall global chrome/grabthemall/skin/global/
+locale grabthemall en-US chrome/grabthemall/locale/en-US/
+overlay	chrome://browser/content/browser.xul	chrome://grabthemall/content/GrabThemAll.xul
+style	chrome://global/content/customizeToolbar.xul	chrome://grabthemall/skin/GrabThemAll.css

@@ -1,0 +1,20 @@
+<!ENTITY prefwindow.title "Grab Them All preferences">
+<!ENTITY dialogheader.descr "Preferences">
+<!ENTITY dialogheader.title "Grab Them All">
+<!ENTITY filetypepref.label "Choose an image format">
+<!ENTITY filetypepref.label.png "PNG">
+<!ENTITY filetypepref.label.jpg "JPEG">
+<!ENTITY windowsize.label "Choose a window size">
+<!ENTITY windowsize.height "Height">
+<!ENTITY windowsize.width "Width">
+<!ENTITY completepagepref.label "Screenshot type">
+<!ENTITY completepagepref.label.yes "Grab complete page">
+<!ENTITY completepagepref.label.no "Grab visible window only">
+<!ENTITY timeout.caption "Site processing timeout">
+<!ENTITY timeout.label "Max page processing time [sec]:">
+<!ENTITY timeToWait.label "Javascript time to wait [sec]:">
+<!ENTITY reportfile.caption "Report file">
+<!ENTITY reportfile.save "Generate report file">
+<!ENTITY capturefile.catpion "Screen shot file names">
+<!ENTITY capturefile.base64 "Base64 (with replaced +/= to -_,)">
+<!ENTITY capturefile.url "Safe URL (with replaced not-safe chars to _)">
