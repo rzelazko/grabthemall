@@ -1,0 +1,3 @@
+content grabthemall file:content/
+locale grabthemall en-US file:locale/en-US/
+locale branding en-US chrome/locale/branding/

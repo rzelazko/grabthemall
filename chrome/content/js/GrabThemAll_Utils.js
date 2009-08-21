@@ -165,5 +165,45 @@ var GrabThemAll_Utils = {
 				.replace('=', ',', 'gi');
 		}
 		return string.replace(/[^a-zA-Z0-9_\-\.\,]+/mig, '_');	
+	},
+	
+	md5sum : function(nsIDir, fileName) {
+    	var path = nsIDir.path;
+		if (path.search(/\\/) != -1) {
+			path += '\\';
+		} else {
+			path += '/';
+		}
+		path += fileName;
+		
+		// hardcoded here for convenience
+		var f = Components.classes["@mozilla.org/file/local;1"]
+		                  .createInstance(Components.interfaces.nsILocalFile);
+		f.initWithPath(path);
+		var istream = Components.classes["@mozilla.org/network/file-input-stream;1"]           
+		                        .createInstance(Components.interfaces.nsIFileInputStream);
+		// open for reading
+		istream.init(f, 0x01, 0444, 0);
+		var ch = Components.classes["@mozilla.org/security/hash;1"]
+		                   .createInstance(Components.interfaces.nsICryptoHash);
+		// we want to use the MD5 algorithm
+		ch.init(ch.MD5);
+		// this tells updateFromStream to read the entire file
+		const PR_UINT32_MAX = 0xffffffff;
+		ch.updateFromStream(istream, PR_UINT32_MAX);
+		// pass false here to get binary data back
+		var hash = ch.finish(false);
+
+		// return the two-digit hexadecimal code for a byte
+		function toHexString(charCode)
+		{
+		  return ("0" + charCode.toString(16)).slice(-2);
+		}
+
+		// convert the binary hash data to a hex string.
+		var s = [toHexString(hash.charCodeAt(i)) for (i in hash)].join("");
+		// s now contains your hash in hex
+		
+		return s;
 	}
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://grabthemall/locale/GrabThemAll_Server.dtd">
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	id="main" title="&grabthemall.label;" windowtype="xulmine"
+	style="width: 300px; height: 80px;" persist="screenX screenY width height sizemode">
+
+	<script type="application/x-javascript" src="js/GrabThemAll_Utils.js" />
+	<script type="application/x-javascript" src="js/GrabThemAll_CommandLineObserver.js" />
+	<script type="application/x-javascript" src="js/GrabThemAll_Server.js" />
+
+	<stringbundleset id="stringbundleset">
+		<stringbundle id="string-bundle" src="chrome://grabthemall/locale/GrabThemAll_Server.properties"/>
+	</stringbundleset>
+	
+	<caption id="saveToDirInfo" label="&grabthemall.saveToDirInfo;" />
+	<caption id="urlFileInfo" label="&grabthemall.urlFileInfo;" />
+</window>

@@ -87,6 +87,7 @@ var GrabThemAll_RunDlg = {
 				'"oryg url";' +
 				'"browser url";' + 
 				'"file name";' + 
+				'"md5 file";' + 
 				'"status"' + "\n");
 		}
 	},
@@ -98,10 +99,13 @@ var GrabThemAll_RunDlg = {
 			var urlHash = GrabThemAll_Utils.hash(this.setupInfo.processingUrl);
 			GrabThemAll_ScreenShot.doSS(pageWindow, this.setupInfo.dir, urlHash);
 			if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
+				var fileName = urlHash + (this.fileType == 0 ? '.jpeg' : '.png');
+				
 				GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, this.report.fileName, 
 					'"' + orygUrl + '";' +
 					'"' + currentUrl + '";' +
-					'"' + urlHash + (this.fileType == 0 ? '.jpeg' : '.png') + '";' +
+					'"' + fileName + '";' +
+					'"' + GrabThemAll_Utils.md5sum(this.setupInfo.dir, fileName) + '";' +
 					'"ok"' + "\n");
 			}
 		}
@@ -122,7 +126,8 @@ var GrabThemAll_RunDlg = {
 			GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, this.report.fileName, 
 				'"' + this.currentUrl() + '";' +
 				'"' + pageWindow.location + '";' +
-				'"";' +
+				'"";' + // file name
+				'"";' + // md5
 				'"' + errMsg + "\"\n");
 		}
 	},
@@ -155,7 +160,8 @@ var GrabThemAll_RunDlg = {
 					GrabThemAll_Utils.saveTxtToFile(me.setupInfo.dir, me.report.fileName, 
 						'"' + me.currentUrl() + '";' +
 						'"' + GrabThemAll_RunDlg.browser.currentURI.spec + '";' +
-						'"";' + 
+						'"";' + // file name
+						'"";' + // md5
 						'"timeout"' +"\n");
 				}
 				GrabThemAll_RunDlg.browser.stop();
@@ -193,6 +199,7 @@ var GrabThemAll_RunDlg = {
 					'"' + this.currentUrl() + '";' +
 					'"' + nextUrl + '";' +
 					'"' + fileName + (this.fileType == 0 ? '.jpeg' : '.png') + '";' +
+					'"' + GrabThemAll_Utils.md5sum(this.setupInfo.dir, fileName) + '";' +
 					'"' + errMsg + "\"\n");
 			}
 			nextUrl = this.getUrl();
