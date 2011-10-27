@@ -12,14 +12,47 @@
 	<script type="application/x-javascript" src="js/GrabThemAll.js" />
 	
 	<toolbarpalette id="BrowserToolbarPalette">
-		<toolbarbutton id="grabthemall-button" class="toolbarbutton-1"
-			label="&grabthemall.label;"	tooltiptext="&grabthemall.label;"
+		<toolbarbutton id="grabthemall-button" 
+			class="toolbarbutton-1"
+			label="&grabthemall.label;"	
+			tooltiptext="&grabthemall.label;"
 			oncommand="GrabThemAll.onMenuItemCommand(event);"/>
 	</toolbarpalette>
 
 	<menupopup id="menu_ToolsPopup">
-		<menuitem id="grabthemall-menuitem" label="&grabthemall.label;" 
+		<menuitem 
+			id="grabthemall-menuitem"
+			class="menuitem-iconic"
+			label="&grabthemall.label;" 
+			tooltiptext="&grabthemall.label;"
 			oncommand="GrabThemAll.onMenuItemCommand(event);" />
 	</menupopup>
 	
+	<menupopup id="taskPopup">
+		<menuitem 
+			id="grabthemall-menuitem"
+			class="menuitem-iconic"
+			label="&grabthemall.label;" 
+			tooltiptext="&grabthemall.label;"
+			oncommand="GrabThemAll.onMenuItemCommand(event);" />
+	</menupopup>
+	
+	<menupopup id="tools-menupopup">
+		<menuitem 
+			id="grabthemall-menuitem"
+			class="menuitem-iconic"
+			label="&grabthemall.label;" 
+			tooltiptext="&grabthemall.label;"
+			oncommand="GrabThemAll.onMenuItemCommand(event);" />
+	</menupopup>
+	
+	<vbox id="appmenuSecondaryPane">
+		<menuitem 
+			id="grabthemall-appmenuitem"
+			class="menuitem-iconic"
+			label="&grabthemall.label;" 
+			tooltiptext="&grabthemall.label;"
+			insertafter="appmenu_addons"
+			oncommand="GrabThemAll.onMenuItemCommand(event);" />
+	</vbox>
 </overlay>

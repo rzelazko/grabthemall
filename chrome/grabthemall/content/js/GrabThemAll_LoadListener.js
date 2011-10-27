@@ -19,13 +19,15 @@ var GrabThemAll_LoadListener = {
     
     handleEvent: function(event){
         if (GrabThemAll_LoadListener.loadFinished) {
+			GrabThemAll_LoadListener.resetTimer();
             return;
         }
         
         
         if ((event.type == "load") || (event.type == "pageshow")) {
             if (!GrabThemAll_LoadListener.alreadyLoaded) {
-                if (event.currentTarget.contentDocument != event.originalTarget) {
+                if (event.currentTarget.contentDocument !== event.originalTarget) {
+					GrabThemAll_LoadListener.resetTimer();
                     return;
                 }
                 GrabThemAll_LoadListener.alreadyLoaded = true;
@@ -56,8 +58,8 @@ var GrabThemAll_LoadListener = {
         }
     },
     
-    resetTimer: function(){
-        if (GrabThemAll_LoadListener.currentTimeoutId != -1) {
+    resetTimer: function() {
+        if (GrabThemAll_LoadListener.currentTimeoutId !== -1) {
             clearTimeout(GrabThemAll_LoadListener.currentTimeoutId);
         }
         if ((new Date()).getTime() > (GrabThemAll_LoadListener.firstLoadTime + GrabThemAll_RunDlg.timeoutTime)) {
@@ -69,27 +71,27 @@ var GrabThemAll_LoadListener = {
         }
     },
     
-    captureStarted: function(){
+    captureStarted: function() {
         GrabThemAll_LoadListener.alreadyLoaded = false;
         GrabThemAll_LoadListener.loadFinished = false;
         GrabThemAll_LoadListener.firstLoadTime = (new Date()).getTime();
         GrabThemAll_LoadListener.currentTimeoutId = setTimeout(GrabThemAll_LoadListener.captureFinished, GrabThemAll_RunDlg.timeoutTime);
     },
     
-    captureFinished: function(){
+    captureFinished: function() {
         if (GrabThemAll_LoadListener.loadFinished) {
             return;
         }
         GrabThemAll_LoadListener.loadFinished = true;
-        setTimeout("GrabThemAll_LoadListener.captureFinalize();", GrabThemAll_RunDlg.timeToWait);	//this allows any sort of javascript on the page a few extra seconds depending on the amount of time passed to it before the picture is taken
+        setTimeout("GrabThemAll_LoadListener.captureFinalize();", GrabThemAll_RunDlg.timeToWait); // this allows any sort of javascript on the page a few extra seconds depending on the amount of time passed to it before the picture is taken
     },
     
-    captureFinalize: function(){
+    captureFinalize: function() {
         var loaderBrowser = document.getElementById('rundlg-browser');
         try {
             const ioService = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
             var origURI = ioService.newURI(loaderBrowser.contentDocument.documentURI, loaderBrowser.contentDocument.characterSet, null);
-            if (origURI.spec.substr(0, 'about:neterror'.length) == 'about:neterror') {
+            if (origURI.spec.substr(0, 'about:neterror'.length) === 'about:neterror') {
 				throw origURI.spec;
 			}
             GrabThemAll_RunDlg.doScreenShot(loaderBrowser.contentWindow, loaderBrowser.contentDocument);

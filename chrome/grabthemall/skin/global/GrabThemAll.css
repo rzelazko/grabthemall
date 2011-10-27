@@ -10,6 +10,6 @@ toolbar[iconsize="small"] #grabthemall-button {
   list-style-image: url("chrome://grabthemall/skin/GrabTehmAll-16.png");
 }
 
-#grabthemall-menuitem {
+#grabthemall-menuitem, #grabthemall-appmenuitem {
     list-style-image: url("chrome://grabthemall/skin/GrabTehmAll-16.png");
 }
