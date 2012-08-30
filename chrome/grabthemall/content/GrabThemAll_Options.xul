@@ -59,11 +59,11 @@
 				<rows>
 					<row>
 						<label control="windowsize-width" value="&windowsize.width;"/>
-						<textbox id="windowsize-width" preference="capture-width" type="number" min="640" size="4" />
+						<textbox id="windowsize-width" preference="capture-width" type="number" min="100" size="4" />
 					</row>
 					<row>
 						<label control="windowsize-height" value="&windowsize.height;"/>
-						<textbox id="windowsize-height" preference="capture-height" type="number" min="480" size="4" />
+						<textbox id="windowsize-height" preference="capture-height" type="number" min="100" size="4" />
 					</row>
 				</rows>
 			</grid>	
