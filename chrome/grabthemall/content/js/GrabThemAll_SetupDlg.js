@@ -97,12 +97,6 @@ var GrabThemAll_SetupDlg = {
 	},
 
 	readFile : function() {
-		try {
-			netscape.security.PrivilegeManager
-					.enablePrivilege("UniversalXPConnect");
-		} catch (e) {
-			alert(this.stringsBundle.getString('errReadPermDenied'));
-		}
 		if (this.file.exists() == false) {
 			alert(this.stringsBundle.getFormattedString('errFileNotExists',
 					[this.file.path]));
