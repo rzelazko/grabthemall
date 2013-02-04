@@ -15,7 +15,7 @@ var GrabThemAll_RunDlg = {
 			this.setupInfo = window.arguments[0];
 		}
 
-		this.stringsBundle = document.getElementById('string-bundle');
+		this.stringsBundle = document.getElementById('GrabThemAll_RunDlg_SB');
 
 		this.setupInfo.totalUrls = this.setupInfo.urlList.length;
 		if (!this.setupInfo.dir || this.setupInfo.totalUrls < 1) {
@@ -51,11 +51,8 @@ var GrabThemAll_RunDlg = {
 			close();
 		}
 
-		this.browser.addEventListener('pageshow', GrabThemAll_LoadListener, true);
     	this.browser.addEventListener('load', GrabThemAll_LoadListener, true);
     	this.browser.addEventListener('unload', GrabThemAll_LoadListener, true);
-    	this.browser.addEventListener('DOMSubtreeModified', GrabThemAll_LoadListener, true);
-    	this.browser.addEventListener('DOMLinkAdded', GrabThemAll_LoadListener, true);
 		
     	GrabThemAll_LoadListener.captureStarted();		
 		GrabThemAll_LoadListener.alreadyLoaded = false;
@@ -78,7 +75,7 @@ var GrabThemAll_RunDlg = {
 		this.browser.loadURI(url);
 				
 		var now = new Date();		
-		this.report.fileName = '_report_' + now.format("yyyymmdd_HHMMss") + '.csv';
+		this.report.fileName = '_report_' + GrabThemAll_DateFormat(now, "yyyymmdd_HHMMss") + '.csv';
 		if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
 			GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, this.report.fileName, 
 				'"oryg url";' +
@@ -89,21 +86,31 @@ var GrabThemAll_RunDlg = {
 	},
 
 	doScreenShot : function(pageWindow, pageDocument) {
-		var currentUrl = pageWindow.location;
-		var orygUrl = this.currentUrl();
-		if (GrabThemAll_Utils.isUrl(currentUrl)) {
-			var urlHash = GrabThemAll_Utils.hash(this.setupInfo.processingUrl);
-			GrabThemAll_ScreenShot.doSS(pageWindow, this.setupInfo.dir, urlHash);
-			if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
-				GrabThemAll_Utils.saveTxtToFile(this.setupInfo.dir, this.report.fileName, 
-					'"' + orygUrl + '";' +
-					'"' + currentUrl + '";' +
-					'"' + urlHash + (this.fileType == 0 ? '.jpeg' : '.png') + '";' +
-					'"ok"' + "\n");
-			}
+		var currentUrl = pageWindow.location
+			gtaRunDlg = this;
+			
+		if (this.timeoutId) {
+			window.clearTimeout(this.timeoutId);
 		}
-		this.nextPage();
-		GrabThemAll_Utils.dump(pageWindow.location + ' [ok]');
+				
+		this.timeoutId = window.setTimeout(function() {
+			gtaRunDlg.browser.stop();
+			
+			var orygUrl = gtaRunDlg.currentUrl();
+			if (GrabThemAll_Utils.isUrl(currentUrl)) {
+				var urlHash = GrabThemAll_Utils.hash(gtaRunDlg.setupInfo.processingUrl);
+				GrabThemAll_ScreenShot.doSS(pageWindow, gtaRunDlg.setupInfo.dir, urlHash);
+				if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
+					GrabThemAll_Utils.saveTxtToFile(gtaRunDlg.setupInfo.dir, gtaRunDlg.report.fileName, 
+						'"' + orygUrl + '";' +
+						'"' + currentUrl + '";' +
+						'"' + urlHash + (gtaRunDlg.fileType == 0 ? '.jpeg' : '.png') + '";' +
+						'"ok"' + "\n");
+				}
+			}
+			gtaRunDlg.nextPage();
+			GrabThemAll_Utils.dump(pageWindow.location + ' [ok]');
+		}, this.timeoutTime);
 	},
 
 	pageError : function(pageWindow, additInfo) {
@@ -126,12 +133,13 @@ var GrabThemAll_RunDlg = {
 
 	nextPage : function() {
 		var nextUrl = this.getUrl();
+			
 		if (GrabThemAll_Utils.isUrl(nextUrl)) {			
 	    	GrabThemAll_LoadListener.captureStarted();		
 			GrabThemAll_LoadListener.alreadyLoaded = false;
-	    	GrabThemAll_LoadListener.loadFinished = false;	
-
-			this.browser.loadURI(nextUrl);
+	    	GrabThemAll_LoadListener.loadFinished = false;
+			
+			gtaRunDlg.browser.loadURI(nextUrl);
 		} else {
 			close();
 		}
@@ -142,23 +150,16 @@ var GrabThemAll_RunDlg = {
 	},
 
 	getUrl : function() {
-		if (this.timeoutId) {
-			window.clearTimeout(this.timeoutId);
-		}
-		if (this.timeoutTime > 0) {
-			var me = this;
-			this.timeoutId = window.setTimeout(function() {
-				if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
-					GrabThemAll_Utils.saveTxtToFile(me.setupInfo.dir, me.report.fileName, 
-						'"' + me.currentUrl() + '";' +
-						'"' + GrabThemAll_RunDlg.browser.currentURI.spec + '";' +
-						'"";' + 
-						'"timeout"' +"\n");
-				}
-				GrabThemAll_RunDlg.browser.stop();
-			}, this.timeoutTime);
-		}
+		var me = this;			
 
+		if (GrabThemAll_Utils.getBoolPref('reportfile.save')) {
+			GrabThemAll_Utils.saveTxtToFile(me.setupInfo.dir, me.report.fileName, 
+				'"' + me.currentUrl() + '";' +
+				'"' + GrabThemAll_RunDlg.browser.currentURI.spec + '";' +
+				'"";' + 
+				'"timeout"' +"\n");				
+		}
+		
 		var todoUrls = this.setupInfo.urlList.length;
 		var doneUrls = this.setupInfo.totalUrls - todoUrls;
 		if (todoUrls < 1) {
@@ -194,7 +195,7 @@ var GrabThemAll_RunDlg = {
 			}
 			nextUrl = this.getUrl();
 		}
-
+		
 		return nextUrl;
 	}
 };

@@ -6,8 +6,8 @@
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 	buttons="cancel" buttonlabelcancel="&rundlg.cancel;">
     
-	<stringbundleset id="stringbundleset">
-		<stringbundle id="string-bundle" src="chrome://grabthemall/locale/GrabThemAll_RunDlg.properties"/>
+	<stringbundleset>
+		<stringbundle id="GrabThemAll_RunDlg_SB" src="chrome://grabthemall/locale/GrabThemAll_RunDlg.properties"/>
 	</stringbundleset>
 	
 	<script type="application/x-javascript" src="js/GrabThemAll_DateFormat.js" />

@@ -6,7 +6,7 @@ var GrabThemAll_SetupDlg = {
 		var pageTimeOut = null;
 
 		this.urlArray = [];
-		this.stringsBundle = document.getElementById('string-bundle');
+		this.stringsBundle = document.getElementById('GrabThemAll_SetupDlg_SB');
 		this.grabThemAllDlg = document.getElementById('grabThemAllSetup');
 
 		this.browser = null;

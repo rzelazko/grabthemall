@@ -36,7 +36,7 @@ var GrabThemAll_Utils = {
 		filePath += fileBaseName + '.' + format;
     	
 		var nsFile = Components.classes["@mozilla.org/file/local;1"]
-			.createInstance(Components.interfaces.nsILocalFile);
+			.createInstance(Components.interfaces.nsIFile);
 		nsFile.initWithPath(filePath);
 		if (!nsFile.exists()) {
 			nsFile.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 420);
@@ -62,7 +62,7 @@ var GrabThemAll_Utils = {
 		filePath += fileName;
     	
 		var nsFile = Components.classes["@mozilla.org/file/local;1"]
-				.createInstance(Components.interfaces.nsILocalFile);
+				.createInstance(Components.interfaces.nsIFile);
 		nsFile.initWithPath(filePath);
 		return nsFile.exists();
     },
@@ -77,7 +77,7 @@ var GrabThemAll_Utils = {
     	filePath += fileName;
     	
     	var nsFile = Components.classes["@mozilla.org/file/local;1"]
-				.createInstance(Components.interfaces.nsILocalFile);
+				.createInstance(Components.interfaces.nsIFile);
 		nsFile.initWithPath(filePath);
 		if (!nsFile.exists()) {
 			nsFile.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 420);

@@ -48,13 +48,6 @@ var GrabThemAll_LoadListener = {
                     GrabThemAll_LoadListener.resetTimer();
                 }
             }
-            else {
-                if (event.type == "DOMSubtreeModified") {
-                    if (GrabThemAll_LoadListener.alreadyLoaded) {
-                        GrabThemAll_LoadListener.resetTimer();
-                    }
-                }
-            }
         }
     },
     
@@ -67,7 +60,7 @@ var GrabThemAll_LoadListener = {
             GrabThemAll_LoadListener.captureFinished();
         }
         else {
-            GrabThemAll_LoadListener.currentTimeoutId = setTimeout(GrabThemAll_LoadListener.captureFinished, GrabThemAll_LoadListener.captureDelay);
+            GrabThemAll_LoadListener.currentTimeoutId = setTimeout(function() { GrabThemAll_LoadListener.captureFinished(); }, GrabThemAll_LoadListener.captureDelay);
         }
     },
     
@@ -75,7 +68,7 @@ var GrabThemAll_LoadListener = {
         GrabThemAll_LoadListener.alreadyLoaded = false;
         GrabThemAll_LoadListener.loadFinished = false;
         GrabThemAll_LoadListener.firstLoadTime = (new Date()).getTime();
-        GrabThemAll_LoadListener.currentTimeoutId = setTimeout(GrabThemAll_LoadListener.captureFinished, GrabThemAll_RunDlg.timeoutTime);
+        GrabThemAll_LoadListener.currentTimeoutId = setTimeout(function() { GrabThemAll_LoadListener.captureFinished(); }, GrabThemAll_RunDlg.timeoutTime);
     },
     
     captureFinished: function() {
@@ -83,7 +76,7 @@ var GrabThemAll_LoadListener = {
             return;
         }
         GrabThemAll_LoadListener.loadFinished = true;
-        setTimeout("GrabThemAll_LoadListener.captureFinalize();", GrabThemAll_RunDlg.timeToWait); // this allows any sort of javascript on the page a few extra seconds depending on the amount of time passed to it before the picture is taken
+        setTimeout(function() { GrabThemAll_LoadListener.captureFinalize(); }, GrabThemAll_RunDlg.timeToWait); // this allows any sort of javascript on the page a few extra seconds depending on the amount of time passed to it before the picture is taken
     },
     
     captureFinalize: function() {
