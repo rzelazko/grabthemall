@@ -46,11 +46,10 @@ var GrabThemAll_ScreenShot = {
 				.getHeight());
 		var context = GrabThemAll_Utils.prepareContext(canvas, box);
 		context.drawWindow(windowToGrab, box.getX(), box.getY(),
-				box.getWidth(), box.getHeight(), 'rgb(0,0,0)');
+				box.getWidth(), box.getHeight(), 'rgb(255,255,255)');
 		context.restore();
 		var dataUrl = canvas.toDataURL('image/' + format);
 		GrabThemAll_Utils.saveScreenToFile(this.dir, this.fileBaseName,
 				dataUrl, format);
-		
 	}
 }

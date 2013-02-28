@@ -7,7 +7,7 @@
 		<em:iconURL>chrome://grabthemall/skin/GrabThemAll.png</em:iconURL>
 		<em:id>grabthemall@zelazko.info</em:id>
 		<em:name>Grab Them All</em:name>
-		<em:version>0.6.5</em:version>
+		<em:version>0.6.6</em:version>
 		<em:type>2</em:type>
 		<em:targetApplication>
 			<RDF:Description>
@@ -20,7 +20,7 @@
 	<em:contributor>Gregory Artim</em:contributor>
 	<em:localized>
 		<RDF:Description>
-			<em:locale>pl_PL</em:locale>
+			<em:locale>pl-PL</em:locale>
 			<em:name>Grab Them All</em:name>
 			<em:description>Wykonuje zrzuty ekranowe wielu stron jednocześnie!</em:description>
 		</RDF:Description>
