@@ -103,7 +103,7 @@ var GrabThemAll_SetupDlg = {
 		}
 		var is = Components.classes["@mozilla.org/network/file-input-stream;1"]
 				.createInstance(Components.interfaces.nsIFileInputStream);
-		is.init(this.file, 0x01, 00004, null);
+		is.init(this.file, 0x01, parseInt("00004", 8), null);
 		var sis = Components.classes["@mozilla.org/scriptableinputstream;1"]
 				.createInstance(Components.interfaces.nsIScriptableInputStream);
 		sis.init(is);

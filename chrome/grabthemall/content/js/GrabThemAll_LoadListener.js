@@ -5,10 +5,9 @@ var GrabThemAll_LoadListener = {
     alreadyLoaded: false,
     firstLoadTime: -1,
     currentTimeoutId: -1,
-    loadFinished: false,
-    captureDelay: 500,
-    
-    QueryInterface: function(aIID){
+    captureLock: false,
+	
+    QueryInterface: function(aIID) {
         if (aIID.equals(Components.interfaces.nsIDOMEventListener) ||
         aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
         aIID.equals(Components.interfaces.nsISupports)) {
@@ -17,71 +16,70 @@ var GrabThemAll_LoadListener = {
         throw Components.results.NS_NOINTERFACE;
     },
     
-    handleEvent: function(event){
-        if (GrabThemAll_LoadListener.loadFinished) {
-			GrabThemAll_LoadListener.resetTimer();
-            return;
-        }
-        
-        
-        if ((event.type == "load") || (event.type == "pageshow")) {
-            if (!GrabThemAll_LoadListener.alreadyLoaded) {
-                if (event.currentTarget.contentDocument !== event.originalTarget) {
-					GrabThemAll_LoadListener.resetTimer();
-                    return;
-                }
-                GrabThemAll_LoadListener.alreadyLoaded = true;
-                GrabThemAll_LoadListener.firstLoadTime = (new Date()).getTime();
-            }
-            GrabThemAll_LoadListener.resetTimer();
-        }
-        else {
-            if (event.type == "unload") {
-                if (event.currentTarget.contentDocument == event.originalTarget) {
-                    GrabThemAll_LoadListener.alreadyLoaded = false;
-                    if (GrabThemAll_LoadListener.currentTimeoutId != -1) {
-                        clearTimeout(GrabThemAll_LoadListener.currentTimeoutId);
-                    }
-                    GrabThemAll_LoadListener.captureStarted();
-                }
-                else {
-                    GrabThemAll_LoadListener.resetTimer();
-                }
+    handleEvent: function(event) {
+        if (event.type == 'load') {
+			GrabThemAll_Utils.dump('event load', true);
+
+            if (event.currentTarget.contentDocument === event.originalTarget) {
+				GrabThemAll_Utils.dump('event load originalTarget', true);
+				
+	            if (!this.alreadyLoaded) {
+    	            this.alreadyLoaded = true;
+        	       	this.firstLoadTime = (new Date()).getTime();
+					GrabThemAll_Utils.dump('event load setFirstLoadTime: ' + this.firstLoadTime, true);
+	            }
+				this.captureStarted();
             }
         }
     },
     
     resetTimer: function() {
-        if (GrabThemAll_LoadListener.currentTimeoutId !== -1) {
-            clearTimeout(GrabThemAll_LoadListener.currentTimeoutId);
+		GrabThemAll_Utils.dump('event resetTimer', true);
+		
+		this.captureLock = false;
+        if (this.currentTimeoutId !== -1) {
+            clearTimeout(this.currentTimeoutId);
         }
-        if ((new Date()).getTime() > (GrabThemAll_LoadListener.firstLoadTime + GrabThemAll_RunDlg.timeoutTime)) {
-            // Just do it
-            GrabThemAll_LoadListener.captureFinished();
+    },
+    
+    captureStarted: function(force) {
+		var gtaLL = this;
+		
+		if (this.captureLock) {
+			GrabThemAll_Utils.dump('event captureStarted isLoced=true', true);
+			return;
+		}
+		
+		this.captureLock = true;
+
+        if (force || (new Date()).getTime() > (this.firstLoadTime + GrabThemAll_RunDlg.getTimeoutTime())) {
+			if (force) {
+				GrabThemAll_Utils.dump('event captureStarted forced', true);
+			} else {
+				GrabThemAll_Utils.dump('event captureStarted firstLoadTime: ' + this.firstLoadTime + ' timeOutTime: ' + GrabThemAll_RunDlg.getTimeoutTime(), true);
+			}
+			
+            this.captureFinished();
         }
         else {
-            GrabThemAll_LoadListener.currentTimeoutId = setTimeout(function() { GrabThemAll_LoadListener.captureFinished(); }, GrabThemAll_LoadListener.captureDelay);
+			GrabThemAll_Utils.dump('event captureStarted setTimeout', true);			
+            this.currentTimeoutId = setTimeout(function() { gtaLL.captureFinished(); }, GrabThemAll_RunDlg.getTimeToWait());
         }
+		
     },
     
-    captureStarted: function() {
-        GrabThemAll_LoadListener.alreadyLoaded = false;
-        GrabThemAll_LoadListener.loadFinished = false;
-        GrabThemAll_LoadListener.firstLoadTime = (new Date()).getTime();
-        GrabThemAll_LoadListener.currentTimeoutId = setTimeout(function() { GrabThemAll_LoadListener.captureFinished(); }, GrabThemAll_RunDlg.timeoutTime);
-    },
-    
-    captureFinished: function() {
-        if (GrabThemAll_LoadListener.loadFinished) {
-            return;
-        }
-        GrabThemAll_LoadListener.loadFinished = true;
-        setTimeout(function() { GrabThemAll_LoadListener.captureFinalize(); }, GrabThemAll_RunDlg.timeToWait); // this allows any sort of javascript on the page a few extra seconds depending on the amount of time passed to it before the picture is taken
+    captureFinished: function() {		
+		GrabThemAll_Utils.dump('event captureFinished', true);
+    	this.alreadyLoaded = false;
+        this.resetTimer();
+        this.captureFinalize();
+		this.captureLock = false;
     },
     
     captureFinalize: function() {
         var loaderBrowser = document.getElementById('rundlg-browser');
         try {
+			GrabThemAll_Utils.dump('event captureFinalize try', true);   
             const ioService = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
             var origURI = ioService.newURI(loaderBrowser.contentDocument.documentURI, loaderBrowser.contentDocument.characterSet, null);
             if (origURI.spec.substr(0, 'about:neterror'.length) === 'about:neterror') {
@@ -90,6 +88,7 @@ var GrabThemAll_LoadListener = {
             GrabThemAll_RunDlg.doScreenShot(loaderBrowser.contentWindow, loaderBrowser.contentDocument);
         } 
         catch (err) {
+			GrabThemAll_Utils.dump('event captureFinalize err', true);
             GrabThemAll_RunDlg.pageError(loaderBrowser.contentWindow, err);
         }
     }

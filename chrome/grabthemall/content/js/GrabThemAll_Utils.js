@@ -3,13 +3,58 @@
  */
 
 var GrabThemAll_Utils = {
-	
-	dump : function(message) {
-		if (GrabThemAll_Utils.getPref('debug')) {
-			var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
-							.getService(Components.interfaces.nsIConsoleService);
-			consoleService.logStringMessage(message);
+	fileFlags : {
+		permFile: parseInt("0600", 8),		
+        writeFlag: 0x02,
+        createFlag: 0x08,
+        truncateFlag: 0x20
+	},
+		
+	init : function () {
+		/** 
+		 * if dump is set there will be full trace in %temp%\grabThemAll_yyyymmdd_HHMMss.log file
+		 */
+		if (!GrabThemAll_Utils.getPref('debug')) {
+			return;
 		}
+		
+		var file = Components.classes["@mozilla.org/file/directory_service;1"].
+					getService(Components.interfaces.nsIProperties).
+					get("TmpD", Components.interfaces.nsIFile);
+		file.append("grabThemAll_" + GrabThemAll_DateFormat(new Date(), "yyyymmdd_HHMMss") + ".log");
+		
+		Components.utils.import("resource://gre/modules/FileUtils.jsm");
+		this.dumpStream = FileUtils.openSafeFileOutputStream(file, FileUtils.MODE_WRONLY | FileUtils.MODE_CREATE | FileUtils.MODE_APPEND);
+	},	
+	
+	close : function () {
+		if (!GrabThemAll_Utils.getPref('debug')) {
+			return;
+		}
+		
+		try {
+			if (this.dumpStream instanceof Components.interfaces.nsISafeOutputStream) {
+				this.dumpStream.finish();
+			} else {
+				this.dumpStream.close();
+			}
+		} catch (e) {
+		}
+	},
+	
+	dump : function(message, browserUrlSuffix) {
+		if (!GrabThemAll_Utils.getPref('debug')) {
+			return;
+		}
+		var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
+								.getService(Components.interfaces.nsIConsoleService);
+		if (browserUrlSuffix) {
+			message = '<' + document.getElementById('rundlg-browser').contentWindow.location.toString() + '> ' + message;
+		}
+		consoleService.logStringMessage(message);	
+		
+		message += "\n";				
+		this.dumpStream.write(message, message.length);
 	},
 
 	getPref : function(name) {
@@ -27,17 +72,8 @@ var GrabThemAll_Utils = {
 	},
     
     saveScreenToFile : function(nsIDir, fileBaseName, dataUrl, format) {    	
-    	var filePath = nsIDir.path;
-		if (filePath.search(/\\/) != -1) {
-			filePath += '\\';
-		} else {
-			filePath += '/';
-		}
-		filePath += fileBaseName + '.' + format;
-    	
-		var nsFile = Components.classes["@mozilla.org/file/local;1"]
-			.createInstance(Components.interfaces.nsIFile);
-		nsFile.initWithPath(filePath);
+		var nsFile = this.getNSFile(nsIDir, fileBaseName + '.' + format);
+		
 		if (!nsFile.exists()) {
 			nsFile.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 420);
 		} else {
@@ -52,22 +88,34 @@ var GrabThemAll_Utils = {
         } 
     },
     
-    fileExists : function(nsIDir, fileName) {
-    	var filePath = nsIDir.path;
-		if (filePath.search(/\\/) != -1) {
-			filePath += '\\';
-		} else {
-			filePath += '/';
-		}
-		filePath += fileName;
-    	
-		var nsFile = Components.classes["@mozilla.org/file/local;1"]
-				.createInstance(Components.interfaces.nsIFile);
-		nsFile.initWithPath(filePath);
+    fileExists : function(nsIDir, fileName) {    	
+		var nsFile = this.getNSFile(nsIDir, fileName);
+		
 		return nsFile.exists();
     },
     
-    saveTxtToFile : function(nsIDir, fileName, dataTxt) {
+    saveTxtToFile : function(nsIDir, fileName, dataTxt) {    	
+    	var nsFile = this.getNSFile(nsIDir, fileName);
+    	
+    	if (nsFile) {
+			var stream = Components.classes["@mozilla.org/network/safe-file-output-stream;1"].
+				createInstance(Components.interfaces.nsIFileOutputStream);
+			stream.init(nsFile, GrabThemAll_Utils.fileFlags.writeFlag | GrabThemAll_Utils.fileFlags.createFlag, GrabThemAll_Utils.fileFlags.permFile, 0);
+			
+			try {
+				stream.write(dataTxt, dataTxt.length);
+				if (stream instanceof Components.interfaces.nsISafeOutputStream) {
+					stream.finish();
+				} else {
+					stream.close();
+				}
+			} catch (e) {
+    			GrabThemAll_Utils.dump('saveTxtToFile error: ' + e, true);
+    		}
+    	}
+    },
+	
+	getNSFile : function(nsIDir, fileName) {
     	var filePath = nsIDir.path;
 		if (filePath.search(/\\/) != -1) {
 			filePath += '\\';
@@ -79,27 +127,9 @@ var GrabThemAll_Utils = {
     	var nsFile = Components.classes["@mozilla.org/file/local;1"]
 				.createInstance(Components.interfaces.nsIFile);
 		nsFile.initWithPath(filePath);
-		if (!nsFile.exists()) {
-			nsFile.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 420);
-		}
-    	
-    	if (nsFile != null) {
-    		try	{
-				var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"]
-			                         .createInstance(Components.interfaces.nsIFileOutputStream);
-			
-				// use 0x02 | 0x10 to open file for appending.
-				foStream.init(nsFile, 0x02 | 0x08 | 0x10, 0666, 0); 
-				// write, create, append
-				// In a c file operation, we have no need to set file mode with or operation,
-				// directly using "r" or "w" usually.
-				foStream.write(dataTxt, dataTxt.length);
-				foStream.close();
-    		} catch (e) {
-    			// alert('I can\'t write to file: ' + filePath);
-    		}
-    	}
-    },
+		
+		return nsFile;
+	},
 
 	isUrl : function(url) {
 		if (!url) {
@@ -118,13 +148,9 @@ var GrabThemAll_Utils = {
         return binaryInputStream;
     },
     
-    newFileOutputStream : function(nsFile) {
-        var writeFlag = 0x02;
-        var createFlag = 0x08;
-        var truncateFlag = 0x20;
-        
+    newFileOutputStream : function(nsFile) {        
         var fileOutputStream = Components.classes["@mozilla.org/network/file-output-stream;1"].createInstance(Components.interfaces.nsIFileOutputStream);
-        fileOutputStream.init(nsFile, writeFlag | createFlag | truncateFlag, 0664, null);
+        fileOutputStream.init(nsFile, GrabThemAll_Utils.fileFlags.writeFlag | GrabThemAll_Utils.fileFlags.createFlag | GrabThemAll_Utils.fileFlags.truncateFlag, GrabThemAll_Utils.fileFlags.permFile, null);
         return fileOutputStream;
     },
     
@@ -166,4 +192,13 @@ var GrabThemAll_Utils = {
 		}
 		return string.replace(/[^a-zA-Z0-9_\-\.\,]+/mig, '_');	
 	}
-}
+};
+
+window.addEventListener('load', function(e) {
+	GrabThemAll_Utils.init();
+}, false);
+
+
+window.addEventListener('unload', function(e) {
+	GrabThemAll_Utils.close();
+}, false);
