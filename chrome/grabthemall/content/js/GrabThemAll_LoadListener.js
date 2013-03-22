@@ -34,10 +34,9 @@ var GrabThemAll_LoadListener = {
     },
     
     resetTimer: function() {
-		GrabThemAll_Utils.dump('event resetTimer', true);
-		
 		this.captureLock = false;
         if (this.currentTimeoutId !== -1) {
+			GrabThemAll_Utils.dump('event resetTimer done', true);
             clearTimeout(this.currentTimeoutId);
         }
     },

@@ -25,6 +25,8 @@ var GrabThemAll_Utils = {
 		
 		Components.utils.import("resource://gre/modules/FileUtils.jsm");
 		this.dumpStream = FileUtils.openSafeFileOutputStream(file, FileUtils.MODE_WRONLY | FileUtils.MODE_CREATE | FileUtils.MODE_APPEND);
+
+		GrabThemAll_Utils.dump('DebugFile: ' + file, false, false);
 	},	
 	
 	close : function () {
@@ -42,7 +44,7 @@ var GrabThemAll_Utils = {
 		}
 	},
 	
-	dump : function(message, browserUrlSuffix) {
+	dump : function(message, browserUrlSuffix, doNotWriteFile) {
 		if (!GrabThemAll_Utils.getPref('debug')) {
 			return;
 		}
@@ -51,7 +53,11 @@ var GrabThemAll_Utils = {
 		if (browserUrlSuffix) {
 			message = '<' + document.getElementById('rundlg-browser').contentWindow.location.toString() + '> ' + message;
 		}
-		consoleService.logStringMessage(message);	
+		consoleService.logStringMessage(message);
+
+		if (doNotWriteFile) {
+			return;
+		}
 		
 		message += "\n";				
 		this.dumpStream.write(message, message.length);

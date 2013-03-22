@@ -118,6 +118,7 @@ var GrabThemAll_RunDlg = {
 
 	clearTimeout : function () {
 		if (this.timeoutId) {
+			GrabThemAll_Utils.dump('runDlg clearTimeout done', true);
 			window.clearTimeout(this.timeoutId);
 		}
 			
