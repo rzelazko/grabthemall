@@ -26,7 +26,7 @@ var GrabThemAll_Utils = {
 		Components.utils.import("resource://gre/modules/FileUtils.jsm");
 		this.dumpStream = FileUtils.openSafeFileOutputStream(file, FileUtils.MODE_WRONLY | FileUtils.MODE_CREATE | FileUtils.MODE_APPEND);
 
-		GrabThemAll_Utils.dump('DebugFile: ' + file, false, false);
+		GrabThemAll_Utils.dump('DebugFile: ' + file.path, false, false);
 	},	
 	
 	close : function () {
