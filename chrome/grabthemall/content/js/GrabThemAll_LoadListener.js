@@ -51,6 +51,7 @@ var GrabThemAll_LoadListener = {
 		}
 		
 		this.captureLock = true;
+		GrabThemAll_RunDlg.clearTimeout();
 
         if (force || (new Date()).getTime() > (this.firstLoadTime + GrabThemAll_RunDlg.getTimeoutTime())) {
 			if (force) {

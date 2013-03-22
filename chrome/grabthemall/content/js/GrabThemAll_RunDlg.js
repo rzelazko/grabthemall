@@ -100,10 +100,8 @@ var GrabThemAll_RunDlg = {
 		var nextUrl = this.getUrl(),
 			gtaRunDlg = this;
 		
-		if (this.timeoutId) {
-			window.clearTimeout(this.timeoutId);
-		}
-			
+		this.clearTimeout();
+
 		if (GrabThemAll_Utils.isUrl(nextUrl)) {
 			GrabThemAll_Utils.dump('runDlg nextPage loadURI: ' + nextUrl, true);
 			this.browser.loadURI(nextUrl);
@@ -116,6 +114,13 @@ var GrabThemAll_RunDlg = {
 		} else {
 			close();
 		}
+	},
+
+	clearTimeout : function () {
+		if (this.timeoutId) {
+			window.clearTimeout(this.timeoutId);
+		}
+			
 	},
 	
 	currentUrl : function() {
