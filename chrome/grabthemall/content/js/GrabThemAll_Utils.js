@@ -141,7 +141,7 @@ var GrabThemAll_Utils = {
 		if (!url) {
 			return false;
 		}
-		var regUrl = /^http[s]?:\/\//i;
+		var regUrl = /^(http[s]?|file):\/\//i;
 		return regUrl.test(url);
 	},
     
