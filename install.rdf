@@ -7,7 +7,7 @@
 		<em:iconURL>chrome://grabthemall/skin/GrabThemAll.png</em:iconURL>
 		<em:id>grabthemall@zelazko.info</em:id>
 		<em:name>Grab Them All</em:name>
-		<em:version>0.7</em:version>
+		<em:version>0.7.1</em:version>
 		<em:type>2</em:type>
 		<em:targetApplication>
 			<RDF:Description>
